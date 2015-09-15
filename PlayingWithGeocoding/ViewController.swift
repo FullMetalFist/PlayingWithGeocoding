@@ -16,64 +16,76 @@ class ViewController: UIViewController {
     /* button fires the action to translate zip to lat/long */
     var labelTop: UILabel!
     var textFieldCenter: UITextField!
-    var button: UIButton!
+    var searchButton: UIButton!
+    
+    /* buffer views */
+    var vwTop: UIView!
+    var vwBottom: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         makeLayout()
+        
+        labelTop.text = "Geocoding Placeholder"
+        textFieldCenter.placeholder = "Zipcode Placeholder"
     }
 
     func makeLayout() {
-//        let view1 = UIView()
-//        view1.translatesAutoresizingMaskIntoConstraints = false
-//        view1.backgroundColor = UIColor.blueColor()
-//        
-//        let view2 = UIView()
-//        view2.translatesAutoresizingMaskIntoConstraints = false
-//        view2.backgroundColor = UIColor.greenColor()
-//        
-//        view.addSubview(view1)
-//        view.addSubview(view2)
-//        
-//        let viewsDictionary = ["view1":view1, "view2": view2, "labelTop":labelTop, "textFieldCenter":textFieldCenter]
-//        let metricsDictionary = ["view1Height":50.0, "view2Height":30.0, "viewWidth":100.0]
-//        
-//        let view1_constraint_H:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:[view1(viewWidth)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metricsDictionary, views: viewsDictionary)
-//        let view1_constraint_V:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:[view1(view1Height)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metricsDictionary, views: viewsDictionary)
-//        
-//        view1.addConstraints(view1_constraint_H)
-//        view1.addConstraints(view1_constraint_V)
-//        
-//        let view2_constraint_H:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:[view2(viewWidth)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metricsDictionary, views: viewsDictionary)
-//        let view2_constraint_V:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:[view2(>=view2Height)]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metricsDictionary, views: viewsDictionary)
-//        
-//        view2.addConstraints(view2_constraint_H)
-//        view2.addConstraints(view2_constraint_V)
-//        
-//        let view_constraint_H:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[view2]", options: NSLayoutFormatOptions(rawValue: 0), metrics: metricsDictionary, views: viewsDictionary)
-//        let view_constraint_V:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:|-36-[view1]- [view2]-0-|", options: NSLayoutFormatOptions.AlignAllLeading, metrics: metricsDictionary, views: viewsDictionary)
-//        
-//        view.addConstraints(view_constraint_H)
-//        view.addConstraints(view_constraint_V)
-//        
-//        let control_constraint_H:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[button(>80)]-20-[labelTop(>=100)]", options: NSLayoutFormatOptions.AlignAllCenterY, metrics: nil, views: viewsDictionary)
-//        let control_constraint_V:Array = NSLayoutConstraint.constraintsWithVisualFormat("V:[button]-40-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
-//        view2.addConstraints(control_constraint_H)
-//        view2.addConstraints(control_constraint_V)
-//        
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setTitle("Title", forState: UIControlState.Normal)
-//        button.addTarget(self, action: "buttonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-//        button.backgroundColor = UIColor.orangeColor()
-//        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-//        
-//        labelTop.translatesAutoresizingMaskIntoConstraints = false
+        initViews()
+        createConstraints()
     }
     
-    func buttonPressed() {
-        print("button got pressed")
+    func initViews() -> Void {
+        // initialize
+        labelTop = UILabel()
+        textFieldCenter = UITextField()
+        searchButton = UIButton()
+        
+        vwTop = UIView()
+        vwBottom = UIView()
+        
+        // prepare autolayout
+        labelTop.translatesAutoresizingMaskIntoConstraints = false
+        textFieldCenter.translatesAutoresizingMaskIntoConstraints = false
+        searchButton.translatesAutoresizingMaskIntoConstraints = false
+        vwTop.translatesAutoresizingMaskIntoConstraints = false
+        vwBottom.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        // set color
+        vwTop.backgroundColor = UIColor.grayColor()
+        searchButton.backgroundColor = UIColor.blueColor()
+        vwBottom.backgroundColor = UIColor.grayColor()
+        
+        // add to superview
+        self.view.addSubview(labelTop)
+        self.view.addSubview(textFieldCenter)
+        self.view.addSubview(searchButton)
+        self.view.addSubview(vwTop)
+        self.view.addSubview(vwBottom)
     }
+    
+    func createConstraints() {
+        // views to add constraints to
+        let viewsDictionary = Dictionary(dictionaryLiteral: ("labelTop", labelTop), ("textFieldCenter", textFieldCenter), ("searchButton", searchButton), ("vwTop",vwTop), ("vwBottom",vwBottom))
+        let horizontalConstraintTopBuffer = NSLayoutConstraint.constraintsWithVisualFormat("H:|[vwTop]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+        self.view.addConstraints(horizontalConstraintTopBuffer)
+        let horizontalConstraintLabel = NSLayoutConstraint.constraintsWithVisualFormat("H:|-30-[labelTop]-30-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+        self.view.addConstraints(horizontalConstraintLabel)
+        let horizontalConstraintTextFieldButton = NSLayoutConstraint.constraintsWithVisualFormat("H:|-20-[textFieldCenter]-10-[searchButton(==textFieldCenter)]-20-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+        self.view.addConstraints(horizontalConstraintTextFieldButton)
+        let horizontalConstraintBottomBuffer = NSLayoutConstraint.constraintsWithVisualFormat("H:|[vwBottom]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+        self.view.addConstraints(horizontalConstraintBottomBuffer)
+        let verticalConstraintTextField = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[vwTop][labelTop(50)][textFieldCenter(==labelTop)][vwBottom(==vwTop)]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+        self.view.addConstraints(verticalConstraintTextField)
+        let verticalConstraintButton = NSLayoutConstraint.constraintsWithVisualFormat("V:|-[vwTop][labelTop(50)][searchButton(==labelTop)][vwBottom(==vwTop)]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+        self.view.addConstraints(verticalConstraintButton)
+    }
+    
+//    func buttonPressed() {
+//        print("button got pressed")
+//    }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.AllButUpsideDown
