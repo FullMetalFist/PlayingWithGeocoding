@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
     
     /* label to display lat/long */
     /* text field is where user enters zip */
@@ -22,13 +22,34 @@ class ViewController: UIViewController {
     var vwTop: UIView!
     var vwBottom: UIView!
     
+    // geocoding
+    let locationManager = CLLocationManager()
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.locationManager.delegate = self
+        
         makeLayout()
         
         labelTop.text = "Geocoding Placeholder"
         textFieldCenter.placeholder = "Zipcode Placeholder"
+        
+        startSearch()
+    }
+    
+    func startSearch() {
+//        let address = "1 Infinite Loop, Cupertino, CA"
+        let geocoder = CLGeocoder()
+        let zipcode = "11423"
+
+        geocoder.geocodeAddressString(zipcode) { (placemarks, error) -> Void in
+            if let placemark = placemarks?[0] {
+                print("\(placemark)")
+            }
+        }
     }
 
     func makeLayout() {
