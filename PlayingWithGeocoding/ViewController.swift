@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate {
     
     /* label to display lat/long */
     /* text field is where user enters zip */
@@ -31,7 +31,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.locationManager.delegate = self
-        
+        self.textFieldCenter.delegate = self
         makeLayout()
         
         labelTop.text = "Geocoding Placeholder"
